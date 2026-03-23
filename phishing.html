@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Siber Güvenlik Farkındalık Platformu</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* --- MODERN DARK THEME --- */
+        :root {
+            --bg-body: #0a0e17;
+            --bg-sidebar: #111827;
+            --bg-card: #1f2937;
+            --bg-input: #2d3748;
+            --bg-hover: #374151;
+            --border-color: #374151;
+            --border-light: #4b5563;
+            
+            --primary: #3b82f6;
+            --primary-dark: #1d4ed8;
+            --primary-light: rgba(59, 130, 246, 0.1);
+            --danger: #ef4444;
+            --danger-light: rgba(239, 68, 68, 0.1);
+            --success: #10b981;
+            --success-light: rgba(16, 185, 129, 0.1);
+            --warning: #f59e0b;
+            
+            --text-main: #f9fafb;
+            --text-secondary: #d1d5db;
+            --text-muted: #9ca3af;
+            --text-light: #6b7280;
+            
+            --shadow-card: 0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
+            --shadow-sidebar: 8px 0 20px rgba(0, 0, 0, 0.3);
+            --shadow-button: 0 4px 12px rgba(59, 130, 246, 0.25);
+            --shadow-hover: 0 10px 25px rgba(0, 0, 0, 0.5);
+            
+            --gradient-primary: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            --gradient-danger: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            --gradient-success: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            
+            --radius-sm: 6px;
+            --radius-md: 10px;
+            --radius-lg: 14px;
+            --radius-xl: 18px;
+            
+            --transition-fast: 0.2s ease;
+            --transition-medium: 0.3s ease;
+            --transition-slow: 0.5s ease;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            margin: 0; padding: 0;
+            display: flex; height: 100vh; overflow: hidden;
+            line-height: 1.6; font-weight: 400;
+        }
+
+        /* --- TYPOGRAPHY --- */
+        h1, h2, h3, h4, h5, h6 { font-weight: 600; line-height: 1.3; margin-bottom: 0.5em; }
+        h2 { font-size: 1.75rem; }
+        h3 { font-size: 1.4rem; }
+        p { margin-bottom: 1rem; }
+        small { font-size: 0.875rem; color: var(--text-muted); }
+
+        /* --- SCROLLBAR --- */
+        ::-webkit-scrollbar { width: 10px; height: 10px; }
+        ::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.05); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb { background: var(--bg-input); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--border-color); }
+
+        /* --- SIDEBAR --- */
+        .sidebar {
+            width: 280px;
+            background-color: var(--bg-sidebar);
+            border-right: 1px solid var(--border-color);
+            display: flex; flex-direction: column;
+            padding: 0; box-shadow: var(--shadow-sidebar);
+            z-index: 10; flex-shrink: 0; position: relative; overflow: hidden;
+        }
+        .sidebar::before {
+            content: ''; position: absolute; top: 0; left: 0;
+            width: 4px; height: 100%; background: var(--gradient-primary); z-index: 1;
+        }
+        .brand {
+            padding: 28px 24px; margin-bottom: 10px; text-align: left;
+            border-bottom: 1px solid var(--border-color);
+            display: flex; align-items: center; gap: 12px;
+            background: rgba(30, 41, 59, 0.5);
+        }
+        .brand-icon {
+            font-size: 1.8rem; color: var(--primary); background: var(--primary-light);
+            width: 48px; height: 48px; border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .brand-text { display: flex; flex-direction: column; }
+        .brand-text h1 { font-size: 1.5rem; font-weight: 700; margin: 0; color: var(--text-main); letter-spacing: -0.5px; }
+        .brand-text small { font-size: 0.8rem; color: var(--text-muted); font-weight: 400; }
+
+        .menu-container { padding: 24px; flex-grow: 1; display: flex; flex-direction: column; gap: 8px; }
+        .menu-item {
+            padding: 16px 20px; cursor: pointer; border-radius: var(--radius-md);
+            margin-bottom: 4px; transition: all var(--transition-medium);
+            display: flex; align-items: center; gap: 16px;
+            font-weight: 500; color: var(--text-secondary);
+            border: 1px solid transparent; position: relative; overflow: hidden;
+        }
+        .menu-item:hover { background-color: var(--bg-hover); color: var(--text-main); transform: translateX(4px); }
+        .menu-item.active {
+            background-color: var(--primary-light); color: var(--primary);
+            border-color: rgba(59, 130, 246, 0.3); box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+        }
+        .menu-item.active::before {
+            content: ''; position: absolute; left: 0; top: 0; height: 100%; width: 4px;
+            background: var(--gradient-primary); border-radius: 0 4px 4px 0;
+        }
+        .menu-icon { font-size: 1.2rem; width: 24px; text-align: center; }
+
+        /* --- MAIN CONTENT --- */
+        .main-content {
+            flex-grow: 1; padding: 30px; overflow-y: auto; position: relative;
+            display: flex; flex-direction: column;
+        }
+        .page-section {
+            display: none; animation: fadeIn 0.4s ease;
+            max-width: 1000px; margin: 0 auto; width: 100%; flex-grow: 1;
+        }
+        .page-section.active { display: flex; flex-direction: column; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- HEADER BAR --- */
+        .header-bar {
+            display: flex; justify-content: space-between; align-items: center;
+            background: var(--bg-card); padding: 24px 32px; border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-card); margin-bottom: 30px; border: 1px solid var(--border-color);
+            position: relative; overflow: hidden;
+        }
+        .header-bar::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: var(--gradient-primary);
+        }
+        .header-info h2 { margin: 0; font-size: 1.8rem; font-weight: 700; color: var(--text-main); }
+        .header-info small { font-size: 0.95rem; }
+
+        .score-container { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
+        .score-value {
+            font-weight: 700; font-size: 1.8rem; color: var(--primary);
+            text-shadow: 0 0 10px rgba(59, 130, 246, 0.3);
+        }
+        .step-indicator { display: flex; align-items: center; gap: 8px; color: var(--text-muted); font-size: 0.95rem; }
+        .step-progress { width: 120px; height: 6px; background-color: var(--bg-input); border-radius: 3px; overflow: hidden; }
+        .step-progress-bar { height: 100%; background: var(--gradient-primary); border-radius: 3px; transition: width 0.5s ease; }
+
+        /* --- EMAIL CLIENT SIMULATION --- */
+        .email-client {
+            background: var(--bg-card); border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-card); overflow: hidden; border: 1px solid var(--border-color);
+            margin-bottom: 30px; flex-grow: 1; display: flex; flex-direction: column;
+        }
+        .email-toolbar {
+            background: rgba(0, 0, 0, 0.3); padding: 18px 28px; display: flex; gap: 24px;
+            border-bottom: 1px solid var(--border-color); color: var(--text-muted);
+            font-size: 0.95rem; align-items: center;
+        }
+        .email-toolbar span { cursor: pointer; transition: var(--transition-fast); padding: 6px 10px; border-radius: var(--radius-sm); }
+        .email-toolbar span:hover { color: var(--text-main); background-color: var(--bg-input); }
+        .email-toolbar .inbox-label { flex-grow: 1; text-align: right; font-weight: 500; color: var(--text-secondary); }
+
+        .email-body { padding: 40px; color: var(--text-main); font-size: 1.05rem; flex-grow: 1; overflow-y: auto; }
+        .email-subject {
+            font-size: 1.8rem; font-weight: 700; margin-bottom: 24px;
+            color: var(--text-main); padding-bottom: 16px; border-bottom: 1px solid var(--border-light);
+        }
+        .sender-info { 
+            display: flex; align-items: center; margin-bottom: 32px; padding: 20px;
+            background: rgba(45, 55, 72, 0.3); border-radius: var(--radius-md);
+        }
+        .avatar { 
+            width: 56px; height: 56px; background: var(--gradient-primary); color: white;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-weight: 700; margin-right: 20px; font-size: 1.4rem; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+        .sender-details { display: flex; flex-direction: column; }
+        .sender-name { font-weight: 600; font-size: 1.1rem; margin-bottom: 4px; }
+        .sender-email { color: var(--text-muted); font-size: 0.95rem; }
+        .email-content { line-height: 1.7; font-size: 1.05rem; }
+        .email-content p { margin-bottom: 1.2rem; }
+
+        /* --- BUTTONS --- */
+        .btn {
+            padding: 14px 32px; border: none; border-radius: var(--radius-md); cursor: pointer;
+            font-weight: 600; transition: all var(--transition-medium); font-size: 1rem;
+            margin: 0 10px; display: inline-flex; align-items: center; justify-content: center;
+            gap: 10px; letter-spacing: 0.3px; position: relative; overflow: hidden;
+        }
+        .btn::after {
+            content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.7s;
+        }
+        .btn:hover::after { left: 100%; }
+        .btn:hover { transform: translateY(-3px); box-shadow: var(--shadow-hover); }
+        .btn:active { transform: translateY(-1px); }
+        
+        .btn-safe { 
+            background: var(--success-light); color: var(--success); border: 1px solid var(--success);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.15);
+        }
+        .btn-safe:hover { background: var(--gradient-success); color: white; border-color: transparent; }
+
+        .btn-scam { 
+            background: var(--danger-light); color: var(--danger); border: 1px solid var(--danger);
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.15);
+        }
+        .btn-scam:hover { background: var(--gradient-danger); color: white; border-color: transparent; }
+
+        .btn-primary { 
+            background: var(--gradient-primary); color: white; box-shadow: var(--shadow-button); border: none;
+        }
+        .btn-primary:hover { background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%); }
+
+        .cta-button {
+            display: inline-flex; align-items: center; justify-content: center;
+            background-color: var(--primary); color: white; padding: 14px 28px;
+            text-decoration: none; border-radius: var(--radius-md); font-weight: 600;
+            margin-top: 20px; cursor: pointer; border: none; transition: all var(--transition-medium);
+            box-shadow: var(--shadow-button); gap: 10px;
+        }
+        .cta-button:hover { background-color: var(--primary-dark); transform: translateY(-2px); box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3); }
+
+        /* --- DECISION BUTTONS CONTAINER --- */
+        .decision-container {
+            text-align: center; margin-top: 30px; padding: 30px; background: var(--bg-card);
+            border-radius: var(--radius-lg); border: 1px solid var(--border-color); box-shadow: var(--shadow-card);
+        }
+        .decision-title { font-size: 1.2rem; font-weight: 600; margin-bottom: 24px; color: var(--text-secondary); }
+
+        /* --- AI TOOL SECTION --- */
+        .ai-card {
+            background: var(--bg-card); padding: 36px; border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-card); border: 1px solid var(--border-color);
+            flex-grow: 1; display: flex; flex-direction: column;
+        }
+        .ai-header { display: flex; align-items: center; gap: 16px; margin-bottom: 24px; padding-bottom: 20px; border-bottom: 1px solid var(--border-color); }
+        .ai-icon {
+            font-size: 2.2rem; color: var(--primary); background: var(--primary-light);
+            width: 60px; height: 60px; border-radius: 16px; display: flex; align-items: center; justify-content: center;
+        }
+        .ai-title { font-size: 1.8rem; font-weight: 700; color: var(--text-main); margin: 0; }
+        .ai-subtitle { color: var(--text-muted); margin-bottom: 30px; font-size: 1.05rem; }
+
+        .input-label { font-weight: 600; display: block; margin-bottom: 12px; color: var(--text-main); font-size: 1.1rem; }
+        textarea {
+            width: 100%; height: 180px; padding: 20px; background-color: rgba(0, 0, 0, 0.2);
+            color: var(--text-main); border: 1px solid var(--border-color); border-radius: var(--radius-md);
+            font-family: inherit; font-size: 1rem; resize: vertical; box-sizing: border-box;
+            outline: none; transition: all var(--transition-medium); line-height: 1.6;
+        }
+        textarea:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2); background-color: rgba(0, 0, 0, 0.3); }
+
+        .ai-result-box {
+            background: rgba(0, 0, 0, 0.25); padding: 28px; border-radius: var(--radius-md);
+            margin-top: 30px; display: none; border: 1px solid var(--border-color);
+            border-left-width: 6px; animation: fadeIn 0.5s ease;
+        }
+        .ai-result-title { font-size: 1.4rem; font-weight: 700; margin-top: 0; margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
+        .ai-result-content { line-height: 1.7; color: var(--text-main); }
+        .ai-result-content ul { margin-left: 20px; margin-bottom: 1rem; }
+        .ai-result-content li { margin-bottom: 8px; }
+
+        .loading-spinner {
+            display: none; text-align: center; padding: 40px; color: var(--primary);
+            flex-direction: column; align-items: center; gap: 20px;
+        }
+        .spinner {
+            width: 50px; height: 50px; border: 4px solid rgba(59, 130, 246, 0.2);
+            border-top-color: var(--primary); border-radius: 50%; animation: spin 1s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* --- MODAL --- */
+        .modal-overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(8px); z-index: 2000;
+            justify-content: center; align-items: center; animation: fadeIn 0.3s ease;
+        }
+        .modal-content {
+            background: var(--bg-card); padding: 40px; border-radius: 20px; max-width: 650px; width: 90%;
+            text-align: center; border: 1px solid var(--border-color); box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6);
+            animation: modalSlideIn 0.4s ease; position: relative; overflow: hidden;
+        }
+        @keyframes modalSlideIn {
+            from { opacity: 0; transform: translateY(40px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .modal-content::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 6px; background: var(--gradient-primary);
+        }
+        .modal-icon {
+            font-size: 70px; margin-bottom: 20px; display: inline-block; width: 100px; height: 100px;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 24px;
+        }
+        .modal-success .modal-icon { background: var(--success-light); color: var(--success); border: 2px solid var(--success); }
+        .modal-danger .modal-icon { background: var(--danger-light); color: var(--danger); border: 2px solid var(--danger); }
+
+        .modal-title { font-size: 2rem; font-weight: 700; margin-bottom: 16px; color: var(--text-main); }
+        .modal-message { font-weight: 500; font-size: 1.2rem; color: var(--text-secondary); margin-bottom: 30px; line-height: 1.5; }
+
+        .feedback-box {
+            background: rgba(59, 130, 246, 0.08); border-left: 4px solid var(--primary);
+            text-align: left; padding: 24px; margin-top: 24px; font-size: 1rem;
+            border-radius: 0 var(--radius-md) var(--radius-md) 0;
+        }
+        .feedback-title {
+            color: var(--primary); font-weight: 700; margin-bottom: 12px;
+            font-size: 1.1rem; display: flex; align-items: center; gap: 10px;
+        }
+        .feedback-box ul { margin: 0; padding-left: 20px; color: var(--text-main); }
+        .feedback-box li { margin-bottom: 10px; line-height: 1.5; }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 1100px) {
+            .sidebar { width: 240px; }
+            .main-content { padding: 20px; }
+        }
+        @media (max-width: 900px) {
+            body { flex-direction: column; height: auto; overflow-y: auto; }
+            .sidebar { width: 100%; height: auto; border-right: none; border-bottom: 1px solid var(--border-color); }
+            .menu-container { flex-direction: row; overflow-x: auto; padding: 20px; }
+            .menu-item { flex-shrink: 0; white-space: nowrap; }
+            .brand { padding: 20px; }
+            .main-content { overflow-y: visible; }
+        }
+        @media (max-width: 600px) {
+            .header-bar { flex-direction: column; align-items: flex-start; gap: 20px; }
+            .score-container { align-items: flex-start; }
+            .decision-container { padding: 20px; }
+            .btn { margin: 5px; width: calc(100% - 20px); max-width: 300px; }
+            .ai-card { padding: 24px; }
+            .modal-content { padding: 30px 20px; width: 95%; }
+        }
+
+        .text-center { text-align: center; }
+        .mb-1 { margin-bottom: 0.5rem; } .mb-2 { margin-bottom: 1rem; } .mb-3 { margin-bottom: 1.5rem; }
+        .mt-1 { margin-top: 0.5rem; } .mt-2 { margin-top: 1rem; } .mt-3 { margin-top: 1.5rem; }
+        .w-100 { width: 100%; }
+    </style>
+</head>
+<body>
+
+<nav class="sidebar">
+    <div class="brand">
+        <div class="brand-icon">
+            <i class="fas fa-shield-alt"></i>
+        </div>
+        <div class="brand-text">
+            <h1>Phishing Defender</h1>
+            <small>Siber Güvenlik Eğitim Platformu</small>
+        </div>
+    </div>
+    
+    <div class="menu-container">
+        <div class="menu-item active" onclick="switchPage('simulation', this)">
+            <div class="menu-icon"><i class="fas fa-graduation-cap"></i></div>
+            <span>Eğitim Simülasyonu</span>
+        </div>
+        <div class="menu-item" onclick="switchPage('ai-tool', this)">
+            <div class="menu-icon"><i class="fas fa-robot"></i></div>
+            <span>AI Dedektifi</span>
+        </div>
+    </div>
+</nav>
+
+<main class="main-content">
+    <section id="page-simulation" class="page-section active">
+        <div class="header-bar">
+            <div class="header-info">
+                <h2>Phishing Farkındalık Testi</h2>
+                <small>Senaryoları dikkatle inceleyin ve güvenli mi yoksa şüpheli mi olduğuna karar verin</small>
+            </div>
+            <div class="score-container">
+                <div class="score-value"><span id="score">0</span> Puan</div>
+                <div class="step-indicator">
+                    <span>Adım <span id="currentStep">1</span>/<span id="totalSteps">5</span></span>
+                    <div class="step-progress">
+                        <div class="step-progress-bar" id="progressBar"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="email-client">
+            <div class="email-toolbar">
+                <span><i class="fas fa-reply"></i> Yanıtla</span>
+                <span><i class="fas fa-trash-alt"></i> Sil</span>
+                <span><i class="fas fa-ban"></i> Spam</span>
+                <span class="inbox-label">Gelen Kutusu</span>
+            </div>
+            <div class="email-body" id="mailContentArea">
+                </div>
+        </div>
+
+        <div class="decision-container" id="decisionButtons">
+            <div class="decision-title">Bu e-posta sizce güvenli mi?</div>
+            <button class="btn btn-safe" onclick="makeDecision('safe')">
+                <i class="fas fa-check-circle"></i> Güvenli
+            </button>
+            <button class="btn btn-scam" onclick="makeDecision('scam')">
+                <i class="fas fa-exclamation-triangle"></i> Şüpheli / Scam
+            </button>
+        </div>
+
+        <div class="text-center mt-3" id="nextBtnWrapper" style="display:none;">
+            <button class="btn btn-primary" onclick="nextQuestion()">
+                Sıradaki Senaryo <i class="fas fa-arrow-right"></i>
+            </button>
+        </div>
+    </section>
+
+    <section id="page-ai-tool" class="page-section">
+        <div class="ai-card">
+            <div class="ai-header">
+                <div class="ai-icon"><i class="fas fa-robot"></i></div>
+                <h2 class="ai-title">Yapay Zeka Mail Analizi</h2>
+            </div>
+            
+            <p class="ai-subtitle">Şüphelendiğiniz e-posta veya SMS metnini yapıştırın, yapay zeka siber güvenlik uzmanı gibi analiz etsin.</p>
+
+            <label class="input-label">Analiz Edilecek Metin:</label>
+            <textarea id="userMailInput" placeholder="Örnek: 'Hesabınız çalındı, hemen tıklayın...' veya şüphelendiğiniz herhangi bir mesajı buraya yapıştırın"></textarea>
+            
+            <button class="btn btn-primary w-100 mt-3" onclick="analyzeWithAI()">
+                <i class="fas fa-search"></i> Otomatik Analiz Et
+            </button>
+
+            <div id="loading" class="loading-spinner">
+                <div class="spinner"></div>
+                <div>Siber tehdit analizi yapılıyor...</div>
+            </div>
+
+            <div id="aiResult" class="ai-result-box">
+                <h3 class="ai-result-title" id="aiVerdictTitle">
+                    <i class="fas fa-clipboard-check"></i> ANALİZ SONUCU
+                </h3>
+                <hr style="border:0; border-top:1px solid var(--border-color); margin:20px 0;">
+                <div id="aiVerdictContent" class="ai-result-content"></div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<div id="resultModal" class="modal-overlay">
+    <div class="modal-content">
+        <div id="modalIcon" class="modal-icon"></div>
+        <h2 id="modalTitle" class="modal-title"></h2>
+        <p id="modalMessage" class="modal-message"></p>
+        <div class="feedback-box">
+            <div class="feedback-title">
+                <i class="fas fa-search"></i> Detaylı Analiz:
+            </div>
+            <ul id="feedbackList"></ul>
+        </div>
+        <button class="btn btn-primary mt-3" onclick="closeModal()">
+            <i class="fas fa-check"></i> Tamam
+        </button>
+    </div>
+</div>
+
+<script>
+  
+    // 
+  
+    const GEMINI_API_KEY = "AIzaSyDfd-i5wJFx9h_P77FBXqef8snCPPnwtQ8"; 
+
+
+    /* --- SAYFA GEÇİŞLERİ --- */
+    function switchPage(pageId, element) {
+        document.querySelectorAll('.menu-item').forEach(el => el.classList.remove('active'));
+        if(element) element.classList.add('active');
+        document.querySelectorAll('.page-section').forEach(el => el.classList.remove('active'));
+        document.getElementById('page-' + pageId).classList.add('active');
+    }
+
+    /* --- SENARYOLAR --- */
+    const scenarios = [
+        {
+            id: 1, type: 'scam',
+            subject: "Hesabınız Askıya Alındı: Acil Eylem Gerekli",
+            senderName: "GarantiGüvenlik", senderEmail: "alert@garantii-update-security.net", avatar: "G",
+            body: `<p>Sayın Müşterimiz,</p>
+                   <p>Hesabınızda şüpheli aktiviteler tespit edildiği için erişim geçici olarak durdurulmuştur.</p>
+                   <p style="color:#ff6b6b; font-weight:bold; background:rgba(239,68,68,0.1); padding:12px; border-radius:6px; border-left:4px solid #ef4444;">
+                     <i class="fas fa-exclamation-triangle"></i> 24 saat içinde doğrulama yapmazsanız hesabınız kalıcı olarak kapatılacaktır.
+                   </p>
+                   <button class="cta-button" onclick="fakeClick()"><i class="fas fa-lock"></i> GÜVENLİ GİRİŞ YAP</button>
+                   <br><br><small style="color:#9ca3af;">Bu otomatik bir mesajdır. Yanıtlamayınız.</small>`,
+            feedback: ["Gönderen adresi resmi değil (garantii-update-security.net).", "Hitap şekli isminiz değil, genel.", "Aciliyet hissi ve tehdit var.", "Bağlantı sahte bir sayfaya yönlendiriyor."]
+        },
+        {
+            id: 2, type: 'safe',
+            subject: "Aylık Hesap Özetiniz",
+            senderName: "Netflix", senderEmail: "info@mailer.netflix.com", avatar: "N",
+            body: `<p>Merhaba Ahmet,</p>
+                   <p>Bu ayki faturanız ekte yer almaktadır. Üyeliğinizin keyfini çıkarın!</p>
+                   <div style="background:rgba(16,185,129,0.1); padding:16px; border-radius:6px; border-left:4px solid #10b981; margin:20px 0;">
+                     <strong>Ödeme Yöntemi:</strong> Kredi Kartı **** 1234
+                   </div>
+                   <br><p style="color:#9ca3af; font-style:italic;"><i class="fas fa-info-circle"></i> İşlem yapmanıza gerek yoktur.</p>`,
+            feedback: ["Gönderen adresi resmi Netflix domaini.", "İsminizle hitap ediliyor.", "Sizden bilgi veya tıklama istemiyor.", "Bilgilendirme amaçlı."]
+        },
+        {
+            id: 3, type: 'scam',
+            subject: "CEO: Acil Havale",
+            senderName: "Murat Yılmaz (CEO)", senderEmail: "ceo.muratyilmaz@gmail.com", avatar: "M",
+            body: `<p>Selam,</p>
+                   <p>Toplantıdayım, acil ödeme yapılması gerekiyor. Muhasebeyi bekleme, aşağıdaki IBAN'a 50.000 TL gönder.</p>
+                   <div style="background:#1f2937; padding:16px; border-radius:6px; border:1px dashed #ef4444; margin:20px 0; font-family:monospace;">
+                     TR00 0000 0000 0000 0000 0000 00
+                   </div>
+                   <p><strong style="color:#f59e0b;"><i class="fas fa-exclamation-circle"></i> Bunu gizli tutmanı istiyorum.</strong></p>
+                   <br><p style="color:#6b7280;">Sent from my iPhone</p>`,
+            feedback: ["CEO kurumsal mail yerine @gmail kullanmış.", "Prosedürlerin atlanması isteniyor.", "Gizlilik baskısı tipik dolandırıcılık yöntemidir.", "Acil eylem isteği şüphe uyandırıyor."]
+        },
+        {
+            id: 4, type: 'scam',
+            subject: "Kargonuz Teslim Edilemedi!",
+            senderName: "Yurtiçi Teslimat", senderEmail: "takip@kargo-takip-sistemi.xyz", avatar: "Y",
+            body: `<p>Kargonuz adresinizde bulunamadı.</p>
+                   <p>Tekrar dağıtım için <strong style="color:#ef4444;">25 TL</strong> ödemeniz gerekmektedir.</p>
+                   <button class="cta-button" onclick="fakeClick()"><i class="fas fa-credit-card"></i> ÖDEME YAP</button>
+                   <br><br><small style="color:#9ca3af;"><i class="fas fa-question-circle"></i> Takip numarası: Belirtilmemiş</small>`,
+            feedback: ["Alan adı şüpheli (.xyz).", "Küçük miktar para isteyerek kart bilgisi çalınıyor.", "Takip numarası yok.", "Resmi kargo firmaları bu şekilde ödeme istemez."]
+        },
+        {
+            id: 5, type: 'safe',
+            subject: "Şifre Sıfırlama Talebi",
+            senderName: "Google", senderEmail: "no-reply@accounts.google.com", avatar: "G",
+            body: `<p>Şifre sıfırlama talebinde bulundunuz.</p>
+                   <p>Talebi siz yaptıysanız aşağıdaki kodu giriniz:</p>
+                   <div style="background:#1e293b; color:white; display:inline-block; padding:20px; border-radius:10px; font-family:monospace; font-size:1.8rem; letter-spacing:5px; margin:20px 0; border:2px solid #3b82f6;">
+                     G-829301
+                   </div>
+                   <br><div style="background:rgba(59,130,246,0.1); padding:16px; border-radius:6px; border-left:4px solid #3b82f6; margin-top:20px;">
+                     <strong><i class="fas fa-shield-alt"></i> Güvenlik Notu:</strong> Bu kodu kimseyle paylaşmayın. Google hiçbir zaman sizden şifrenizi e-posta veya mesajla istemez.
+                   </div>`,
+            feedback: ["Talep sizden geldiyse güvenlidir.", "Linke tıklatmak yerine kod veriyor.", "Resmi Google domaini.", "Güvenlik uyarıları içeriyor."]
+        }
+    ];
+
+    let currentStep = 0;
+    let score = 0;
+    let isAnswered = false;
+
+    window.onload = () => {
+        document.getElementById('totalSteps').innerText = scenarios.length;
+        loadScenario(0);
+        updateProgressBar();
+    };
+
+    function loadScenario(idx) {
+        if(idx >= scenarios.length) { showCompletionModal(); return; }
+        
+        const s = scenarios[idx];
+        document.getElementById('currentStep').innerText = idx + 1;
+        updateProgressBar();
+        
+        document.getElementById('mailContentArea').innerHTML = `
+            <h2 class="email-subject">${s.subject}</h2>
+            <div class="sender-info">
+                <div class="avatar">${s.avatar}</div>
+                <div class="sender-details">
+                    <div class="sender-name">${s.senderName}</div>
+                    <div class="sender-email">${s.senderEmail}</div>
+                    <small>Alıcı: Siz</small>
+                </div>
+            </div>
+            <div class="email-content">${s.body}</div>
+        `;
+        
+        // Düzeltilen ID referansı burada çalışacak
+        const decisionContainer = document.getElementById('decisionButtons');
+        if(decisionContainer) decisionContainer.style.display = 'block';
+        
+        document.getElementById('nextBtnWrapper').style.display = 'none';
+        isAnswered = false;
+    }
+
+    function updateProgressBar() {
+        const progress = ((currentStep + 1) / scenarios.length) * 100;
+        document.getElementById('progressBar').style.width = `${progress}%`;
+    }
+
+    function makeDecision(choice) {
+        if(isAnswered) return;
+        isAnswered = true;
+        const s = scenarios[currentStep];
+        const modal = document.getElementById('resultModal');
+        const title = document.getElementById('modalTitle');
+        const msg = document.getElementById('modalMessage');
+        const icon = document.getElementById('modalIcon');
+        const list = document.getElementById('feedbackList');
+        const modalContent = modal.querySelector('.modal-content');
+
+        modalContent.classList.remove('modal-success', 'modal-danger');
+        list.innerHTML = '';
+        s.feedback.forEach(item => {
+            const li = document.createElement('li');
+            li.innerHTML = `<i class="fas fa-angle-right"></i> ${item}`;
+            list.appendChild(li);
+        });
+
+        if(choice === s.type) {
+            score++;
+            document.getElementById('score').innerText = score;
+            title.innerText = "TEBRİKLER! 🎉";
+            title.style.color = "var(--success)";
+            msg.innerText = "Doğru analiz ettiniz! Bu e-posta hakkındaki tespitiniz doğru.";
+            icon.innerHTML = '<i class="fas fa-shield-alt"></i>';
+            modalContent.classList.add('modal-success');
+        } else {
+            title.innerText = "DİKKAT! ⚠️";
+            title.style.color = "var(--danger)";
+            msg.innerText = s.type === 'scam' 
+                ? "Bu tehlikeli bir phishing e-postasıydı! Daha dikkatli olmalısınız." 
+                : "Bu e-posta güvenliydi, fazla şüpheci davrandınız.";
+            icon.innerHTML = '<i class="fas fa-exclamation-triangle"></i>';
+            modalContent.classList.add('modal-danger');
+        }
+        
+        modal.style.display = 'flex';
+        
+        const decisionContainer = document.getElementById('decisionButtons');
+        if(decisionContainer) decisionContainer.style.display = 'none';
+        
+        document.getElementById('nextBtnWrapper').style.display = 'block';
+    }
+
+    function showCompletionModal() {
+        const modal = document.getElementById('resultModal');
+        const title = document.getElementById('modalTitle');
+        const msg = document.getElementById('modalMessage');
+        const icon = document.getElementById('modalIcon');
+        const list = document.getElementById('feedbackList');
+        const modalContent = modal.querySelector('.modal-content');
+        
+        modalContent.classList.remove('modal-success', 'modal-danger');
+        modalContent.classList.add('modal-success');
+        
+        title.innerText = "EĞİTİM TAMAMLANDI! 🏆";
+        title.style.color = "var(--primary)";
+        
+        const percentage = Math.round((score / scenarios.length) * 100);
+        msg.innerHTML = `Toplam <strong>${score}</strong> doğru cevap verdiniz.<br>Başarı oranınız: <strong>${percentage}%</strong>`;
+        icon.innerHTML = '<i class="fas fa-trophy"></i>';
+        
+        list.innerHTML = `
+            <li><i class="fas fa-check-circle" style="color:#10b981;"></i> Senaryoları başarıyla tamamladınız</li>
+            <li><i class="fas fa-lightbulb" style="color:#f59e0b;"></i> Phishing saldırılarını tanıma beceriniz gelişti</li>
+            <li><i class="fas fa-shield-alt" style="color:#3b82f6;"></i> Artık daha güvendesiniz!</li>
+        `;
+        
+        modal.style.display = 'flex';
+        modal.querySelector('.btn').onclick = function() { location.reload(); };
+    }
+
+    function nextQuestion() { 
+        currentStep++; 
+        loadScenario(currentStep); 
+        closeModal(); 
+    }
+    function closeModal() { document.getElementById('resultModal').style.display = 'none'; }
+    function fakeClick() { alert("⚠️ SİMÜLASYON UYARISI: Gerçek hayatta bu tür bağlantılara tıklamak kişisel bilgilerinizin çalınmasına neden olabilir!"); }
+
+    /* --- AI ANALİZİ --- */
+    async function analyzeWithAI() {
+        const apiKey = GEMINI_API_KEY; 
+        const userText = document.getElementById('userMailInput').value.trim();
+        const resultBox = document.getElementById('aiResult');
+        const loading = document.getElementById('loading');
+        const contentDiv = document.getElementById('aiVerdictContent');
+        const titleDiv = document.getElementById('aiVerdictTitle');
+
+        if (!userText) { alert("Lütfen analiz edilecek metni giriniz."); return; }
+
+        resultBox.style.display = 'none';
+        loading.style.display = 'flex';
+
+        // GÜNCEL MODEL İSMİ KULLANILDI
+        let validModel = "gemini-flash-latest";
+
+        const prompt = `
+            Sen bir siber güvenlik uzmanısın. Aşağıdaki e-posta/mesaj metnini detaylı analiz et.
+            Bu bir Phishing (Oltalama) saldırısı mı yoksa Güvenli bir mesaj mı?
+            
+            Metin: "${userText}"
+            
+            Format:
+            KARAR: [GÜVENLİ / ŞÜPHELİ / TEHLİKELİ]
+            RİSK SEVİYESİ: [DÜŞÜK / ORTA / YÜKSEK]
+            ANALİZ: (Maddeler halinde)
+            ÖNERİLER: (Kısa önlemler)
+        `;
+
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/${validModel}:generateContent?key=${apiKey}`;
+
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+            });
+
+            const data = await response.json();
+            if (data.error) throw new Error(data.error.message);
+            
+            const aiText = data.candidates[0].content.parts[0].text;
+
+            loading.style.display = 'none';
+            resultBox.style.display = 'block';
+
+            if (aiText.includes("TEHLİKELİ") || aiText.includes("YÜKSEK")) {
+                resultBox.style.borderLeftColor = "var(--danger)";
+                titleDiv.style.color = "var(--danger)";
+                titleDiv.innerHTML = '<i class="fas fa-skull-crossbones"></i> YÜKSEK TEHDİT TESPİT EDİLDİ';
+            } else if (aiText.includes("ŞÜPHELİ") || aiText.includes("ORTA")) {
+                resultBox.style.borderLeftColor = "var(--warning)";
+                titleDiv.style.color = "var(--warning)";
+                titleDiv.innerHTML = '<i class="fas fa-exclamation-triangle"></i> ŞÜPHELİ İÇERİK';
+            } else {
+                resultBox.style.borderLeftColor = "var(--success)";
+                titleDiv.style.color = "var(--success)";
+                titleDiv.innerHTML = '<i class="fas fa-check-circle"></i> GÜVENLİ GÖRÜNÜYOR';
+            }
+
+            // Metin formatlama (Markdown benzeri yapıyı HTML'e çevirme)
+            contentDiv.innerHTML = aiText
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/KARAR:/g, '<h4 style="color:var(--primary); margin-top:10px;">KARAR:</h4>')
+                .replace(/RİSK SEVİYESİ:/g, '<h4 style="color:var(--primary); margin-top:10px;">RİSK SEVİYESİ:</h4>')
+                .replace(/ANALİZ:/g, '<h4 style="color:var(--primary); margin-top:10px;">ANALİZ:</h4>')
+                .replace(/ÖNERİLER:/g, '<h4 style="color:var(--primary); margin-top:10px;">ÖNERİLER:</h4>')
+                .replace(/\n\*/g, '<br>•') // Basit liste
+                .replace(/\n/g, '<br>');
+
+        } catch (error) {
+            loading.style.display = 'none';
+            alert(`HATA: ${error.message}\nLütfen API Key'inizin geçerli olduğunu kontrol edin.`);
+        }
+    }
+</script>
+</body>
+</html>
